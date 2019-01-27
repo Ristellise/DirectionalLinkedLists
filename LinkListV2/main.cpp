@@ -1,4 +1,4 @@
-#include "DirectionalLList.h"
+#include "MazeWrapper.h"
 #include <string>
 #include <iostream>
 #ifdef _WIN32
@@ -6,8 +6,17 @@
 #include <windows.h>
 #endif
 
+/* Notes
+- CMaze:
+  - CMaze: Maze file loading process. Creates CNodes
+- MazeWrapper
+  - A Wrapper on top of CMaze to provide Drawing Capabilities.
+
+*/
+
+
 /**
-| Desc: returns the direction. or gives out a null hi
+| Desc: returns the direction. or gives out a null hit if not.
 **/
 Direction getSyncKeyState()
 {
@@ -37,7 +46,7 @@ Direction getSyncKeyState()
 
 int main()
 {
-    Maze ddmap("map.txt");
+    MazeWrapper ddmap("map.txt");
 
     Direction d = Direction::D_NULL;
     ddmap.DrawMap();

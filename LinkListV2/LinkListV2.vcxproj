@@ -118,11 +118,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="DirectionalLList.h" />
+    <ClInclude Include="CMaze.h" />
+    <ClInclude Include="MazeWrapper.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DirectionalLList.cpp" />
+    <ClCompile Include="CMaze.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MazeWrapper.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
