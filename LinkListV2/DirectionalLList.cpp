@@ -23,9 +23,7 @@ void gotoxy(int x, int y)
 /*----- Directional LList Class -----*/
 
 DirectionalLList::DirectionalLList()
-{
-    std::cout << "No file path provided." << std::endl;
-}
+{}
 
 Direction getDirectionfromString(char i)
 {
@@ -58,57 +56,98 @@ DirectionalLList::DirectionalLList(std::string fpath)
     Direction NextNodeDirection = D_COUNT;
     if (in.is_open())
     {
-        
+        DirectionalNode* currentDNode;
         while (std::getline(in,buff))
         {
-            DirectionalNode* currentDNode = new DirectionalNode();
+            currentDNode = new DirectionalNode();
+            
             if (this->startNode == nullptr)
             {
                 this->startNode = new DirectionalNode();
                 this->endNode = this->startNode;
             }
+            else
+            {
+                switch (NextNodeDirection)
+                {
+                    case D_UP:
+                    {
+                        this->DrawOffSetY++;
+                        this->endNode->Node_UP = currentDNode;
+                        currentDNode->Node_DOWN = this->endNode;
+                        this->endNode = currentDNode;
+                        break;
+                    }
+                    case D_DOWN:
+                    {
+                        this->DrawOffSetY--;
+                        this->endNode->Node_DOWN = currentDNode;
+                        currentDNode->Node_UP = this->endNode;
+                        this->endNode = currentDNode;
+                        break;
+                    }
+                    case D_LEFT:
+                    {
+                        this->DrawOffSetX++;
+                        this->endNode->Node_LEFT = currentDNode;
+                        currentDNode->Node_RIGHT = this->endNode;
+                        this->endNode = currentDNode;
+                        break;
+                    }
+                    case D_RIGHT:
+                    {
+                        this->DrawOffSetX--;
+                        this->endNode->Node_RIGHT = currentDNode;
+                        currentDNode->Node_LEFT = this->endNode;
+                        this->endNode = currentDNode;
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
             NextNodeDirection = getDirectionfromString(buff[0]);
-            switch (NextNodeDirection)
-            {
-            case D_UP:
-            {
-                this->DrawOffSetY++;
-                this->endNode->Node_UP = currentDNode;
-                currentDNode->Node_DOWN = this->endNode;
-                this->endNode = currentDNode;
-                break;
-            }
-            case D_DOWN:
-            {
-                this->DrawOffSetY--;
-                this->endNode->Node_DOWN = currentDNode;
-                currentDNode->Node_UP = this->endNode;
-                this->endNode = currentDNode;
-                break;
-            }
-            case D_LEFT:
-            {
-                this->DrawOffSetX++;
-                this->endNode->Node_LEFT = currentDNode;
-                currentDNode->Node_RIGHT = this->endNode;
-                this->endNode = currentDNode;
-                break;
-            }
-            case D_RIGHT:
-            {
-                this->DrawOffSetX--;
-                this->endNode->Node_RIGHT = currentDNode;
-                currentDNode->Node_LEFT = this->endNode;
-                this->endNode = currentDNode;
-                break;
-            }
-            default:
-                break;
-            }
-
-            
+        }
+        currentDNode = new DirectionalNode();
+        switch (NextNodeDirection)
+        {
+        case D_UP:
+        {
+            this->DrawOffSetY++;
+            this->endNode->Node_UP = currentDNode;
+            currentDNode->Node_DOWN = this->endNode;
+            this->endNode = currentDNode;
+            break;
+        }
+        case D_DOWN:
+        {
+            this->DrawOffSetY--;
+            this->endNode->Node_DOWN = currentDNode;
+            currentDNode->Node_UP = this->endNode;
+            this->endNode = currentDNode;
+            break;
+        }
+        case D_LEFT:
+        {
+            this->DrawOffSetX++;
+            this->endNode->Node_LEFT = currentDNode;
+            currentDNode->Node_RIGHT = this->endNode;
+            this->endNode = currentDNode;
+            break;
+        }
+        case D_RIGHT:
+        {
+            this->DrawOffSetX--;
+            this->endNode->Node_RIGHT = currentDNode;
+            currentDNode->Node_LEFT = this->endNode;
+            this->endNode = currentDNode;
+            break;
+        }
+        default:
+            break;
         }
     }
+    std::cout << "Load OK!" << std::endl;
 }
 
 
@@ -154,12 +193,63 @@ void OnNode(DirectionalNode* currentNode, DirectionalNode* currentDNode)
     }
 }
 
+
+
+nextNodeResult getNextNode(DirectionalNode* previousNode, DirectionalNode* currentNode)
+{
+    if (currentNode->Node_DOWN != nullptr && currentNode->Node_DOWN != previousNode)
+    {
+        return nextNodeResult(Direction::D_DOWN, currentNode->Node_DOWN);
+    }
+    else if (currentNode->Node_LEFT != nullptr && currentNode->Node_LEFT != previousNode)
+    {
+        return nextNodeResult(Direction::D_LEFT, currentNode->Node_LEFT);
+    }
+    else if (currentNode->Node_RIGHT != nullptr && currentNode->Node_RIGHT != previousNode)
+    {
+        return nextNodeResult(Direction::D_RIGHT, currentNode->Node_RIGHT);
+    }
+    else if (currentNode->Node_UP != nullptr && currentNode->Node_UP != previousNode)
+    {
+        return nextNodeResult(Direction::D_UP, currentNode->Node_UP);
+    }
+    else
+    {
+        return nextNodeResult(Direction::D_NULL,nullptr);
+    }
+}
+
+Direction getPreviousDirect(DirectionalNode* Node)
+{
+    if (Node->Node_DOWN != nullptr)
+    {
+        return Direction::D_DOWN;
+    }
+    else if (Node->Node_LEFT != nullptr)
+    {
+        return Direction::D_LEFT;
+    }
+    else if (Node->Node_RIGHT != nullptr)
+    {
+        return Direction::D_RIGHT;
+    }
+    else if (Node->Node_UP != nullptr)
+    {
+        return Direction::D_UP;
+    }
+    else
+    {
+        return Direction::D_NULL;
+    }
+}
+
 void Maze::DrawMap()
 {
     int drwx = negateIfLessThanZeroButMakeItZeroIfItIsMoreThanZero(this->Map.DrawOffSetX)*2;
     int drwy = negateIfLessThanZeroButMakeItZeroIfItIsMoreThanZero(this->Map.DrawOffSetY)*2+2;
     DirectionalNode* currentDNode = this->Map.startNode;
-    Direction lastSide = Direction::D_NULL;
+    DirectionalNode* previousDNode = nullptr;
+    nextNodeResult nextDNode;
     while (true)
     {
         gotoxy(drwx, drwy);
@@ -168,67 +258,63 @@ void Maze::DrawMap()
         {
             break;
         }
-
-        if (lastSide != Direction::D_DOWN && currentDNode->Node_DOWN != nullptr)
+        OnNode(currentNode, currentDNode); // Draw current Node
+        nextDNode = getNextNode(previousDNode,currentDNode);
+        if (nextDNode.Node == nullptr)
         {
-            OnNode(currentNode, currentDNode);
-            drwy++;
-            gotoxy(drwx, drwy);
-            std::cout << "|";
-            drwy++;
-            gotoxy(drwx, drwy);
-            lastSide = Direction::D_UP; // lastSide is always Relative to the nextNode.
-            if (isTheEnd(currentDNode, this->Map.endNode)) { break; }
-            else { currentDNode = currentDNode->Node_DOWN; }
-        }
-        else if (lastSide != Direction::D_UP && currentDNode->Node_UP != nullptr)
-        {
-            OnNode(currentNode, currentDNode);
-            drwy--;
-            gotoxy(drwx, drwy);
-            std::cout << "|";
-            drwy--;
-            gotoxy(drwx, drwy);
-            lastSide = Direction::D_DOWN; // lastSide is always Relative to the nextNode.
-            if (isTheEnd(currentDNode, this->Map.endNode)) { break; }
-            else { currentDNode = currentDNode->Node_DOWN; }
-        }
-        else if (lastSide != Direction::D_LEFT && currentDNode->Node_LEFT != nullptr)
-        {
-            OnNode(currentNode, currentDNode);
-            drwx--;
-            gotoxy(drwx, drwy);
-            std::cout << "-";
-            drwx--;
-            gotoxy(drwx, drwy);
-            lastSide = Direction::D_RIGHT; // lastSide is always Relative to the nextNode.
-            if (isTheEnd(currentDNode, this->Map.endNode)) { break; }
-            else { currentDNode = currentDNode->Node_DOWN; }
-        }
-        else if (lastSide != Direction::D_RIGHT && currentDNode->Node_RIGHT != nullptr)
-        {
-            OnNode(currentNode, currentDNode);
-            drwx++;
-            gotoxy(drwx, drwy);
-            std::cout << "-";
-            drwx++;
-            gotoxy(drwx, drwy);
-            lastSide = Direction::D_LEFT; // lastSide is always Relative to the nextNode.
-            if (isTheEnd(currentDNode, this->Map.endNode)) { break; }
-            else { currentDNode = currentDNode->Node_DOWN; }
+            break;
         }
         else
         {
-            OnNode(currentNode, currentDNode);
-            if (currentDNode == this->Map.endNode)
+            switch (nextDNode.direction)
             {
-                break;
+                case Direction::D_UP:
+                {
+                    drwy--;
+                    gotoxy(drwx, drwy);
+                    std::cout << "|";
+                    drwy--;
+                    gotoxy(drwx, drwy);
+                    break;
+                }
+                case Direction::D_DOWN:
+                {
+                    drwy++;
+                    gotoxy(drwx, drwy);
+                    std::cout << "|";
+                    drwy++;
+                    gotoxy(drwx, drwy);
+                    break;
+                }
+                case Direction::D_LEFT:
+                {
+                    drwx--;
+                    gotoxy(drwx, drwy);
+                    std::cout << "-";
+                    drwx--;
+                    gotoxy(drwx, drwy);
+                    break;
+                }
+                case Direction::D_RIGHT:
+                {
+                    drwx++;
+                    gotoxy(drwx, drwy);
+                    std::cout << "-";
+                    drwx++;
+                    gotoxy(drwx, drwy);
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
             }
-            
         }
-
+        previousDNode = currentDNode;
+        currentDNode = nextDNode.Node;
     }
-    OnNode(currentNode, this->Map.endNode);
+    
+
 }
 
 Maze::Maze()
@@ -240,4 +326,9 @@ Maze::Maze(std::string fpath)
 {
     this->Map = DirectionalLList(fpath);
     this->currentNode = this->Map.startNode;
+}
+
+bool Maze::hasWon()
+{
+    return (this->Map.endNode == this->currentNode);
 }

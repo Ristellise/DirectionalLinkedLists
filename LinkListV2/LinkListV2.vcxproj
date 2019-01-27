@@ -119,12 +119,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DirectionalLList.h" />
-    <ClInclude Include="Listcontainers.h" />
-    <ClInclude Include="LList.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectionalLList.cpp" />
-    <ClCompile Include="LList.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

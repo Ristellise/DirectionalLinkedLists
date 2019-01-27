@@ -42,5 +42,13 @@ public:
     Maze(std::string fpath);
     DirectionalNode* currentNode;
     DirectionalLList Map;
-    
+    bool hasWon();
+};
+
+struct nextNodeResult
+{
+    Direction direction;
+    DirectionalNode* Node;
+    nextNodeResult(Direction direction, DirectionalNode* Node) { this->direction = direction; this->Node = Node; }
+    nextNodeResult() {}
 };

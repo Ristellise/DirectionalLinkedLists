@@ -7,12 +7,11 @@
 #endif
 
 /**
-| Desc: Waits for a key to be pressed
-|       and returns the direction.
+| Desc: returns the direction. or gives out a null hi
 **/
 Direction getSyncKeyState()
 {
-    while (!_kbhit()) {}
+    // Bets not to bother with kbhit()
     Sleep(200);
     if (GetAsyncKeyState(VK_UP))
     {
@@ -47,38 +46,43 @@ int main()
     {
         clearprint = true;
         d = getSyncKeyState();
-        if (d == Direction::D_DOWN && ddmap.currentNode->Node_DOWN != nullptr)
-        {
-            ddmap.currentNode = ddmap.currentNode->Node_DOWN;
-        }
-        else if (d == Direction::D_LEFT && ddmap.currentNode->Node_LEFT != nullptr)
-        {
-            ddmap.currentNode = ddmap.currentNode->Node_LEFT;
-        }
-        else if (d == Direction::D_RIGHT && ddmap.currentNode->Node_RIGHT != nullptr)
-        {
-            ddmap.currentNode = ddmap.currentNode->Node_RIGHT;
-        }
-        else if (d == Direction::D_UP && ddmap.currentNode->Node_UP != nullptr)
-        {
-            ddmap.currentNode = ddmap.currentNode->Node_UP;
-            
-        }
-        else if (d == Direction::D_NULL)
-        {
-            //std::cout << "Invalid button" << std::endl;
-        }
-        else
-        {
-            std::cout << std::endl << "Can't Get There From Here..." << std::endl;
-            clearprint = false;
-        }
-
         if (d != Direction::D_NULL)
         {
-            ddmap.DrawMap(); // Update map.
-        }
+            if (d == Direction::D_DOWN && ddmap.currentNode->Node_DOWN != nullptr)
+            {
+                ddmap.currentNode = ddmap.currentNode->Node_DOWN;
+            }
+            else if (d == Direction::D_LEFT && ddmap.currentNode->Node_LEFT != nullptr)
+            {
+                ddmap.currentNode = ddmap.currentNode->Node_LEFT;
+            }
+            else if (d == Direction::D_RIGHT && ddmap.currentNode->Node_RIGHT != nullptr)
+            {
+                ddmap.currentNode = ddmap.currentNode->Node_RIGHT;
+            }
+            else if (d == Direction::D_UP && ddmap.currentNode->Node_UP != nullptr)
+            {
+                ddmap.currentNode = ddmap.currentNode->Node_UP;
 
+            }
+            else
+            {
+                std::cout << std::endl << "Can't Get There From Here..." << std::endl;
+                clearprint = false;
+            }
+            ddmap.DrawMap(); // Update map.
+            if (clearprint)
+            {
+                std::cout << std::endl << "                            " << std::endl;
+            }
+            if (ddmap.hasWon())
+            {
+                std::cout << std::endl << "You win! To Play another Round, Relaunch the Maze App." << std::endl;
+                return 0;
+            }
+        }
+        
         
     }
+    return 0;
 }

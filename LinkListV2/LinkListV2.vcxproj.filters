@@ -15,20 +15,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Listcontainers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DirectionalLList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
