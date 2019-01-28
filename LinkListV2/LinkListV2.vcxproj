@@ -119,6 +119,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CMaze.h" />
+    <ClInclude Include="CNode.h" />
     <ClInclude Include="MazeWrapper.h" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-
+#include "CNode.h"
 enum Direction
 {
     D_UP,
@@ -9,15 +9,6 @@ enum Direction
     D_RIGHT,
     D_NULL,
     D_COUNT
-};
-
-class CNode
-{
-public:
-    CNode* Node_UP = nullptr;
-    CNode* Node_DOWN = nullptr;
-    CNode* Node_LEFT = nullptr;
-    CNode* Node_RIGHT = nullptr;
 };
 
 class CMaze

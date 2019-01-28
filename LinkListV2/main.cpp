@@ -51,6 +51,7 @@ int main()
     Direction d = Direction::D_NULL;
     ddmap.DrawMap();
     bool clearprint = false;
+    bool init = true;
     while (true)
     {
         clearprint = true;
@@ -84,13 +85,18 @@ int main()
             {
                 std::cout << std::endl << "                            " << std::endl;
             }
+            
             if (ddmap.hasWon())
             {
                 std::cout << std::endl << "You win! To Play another Round, Relaunch the Maze App." << std::endl;
                 return 0;
             }
         }
-        
+        if (init)
+        {
+            std::cout << std::endl << "To move, use the Arrow Keys." << std::endl;
+            init = false;
+        }
         
     }
     return 0;

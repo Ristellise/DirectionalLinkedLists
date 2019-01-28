@@ -32,5 +32,8 @@
     <ClInclude Include="MazeWrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
