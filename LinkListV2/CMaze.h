@@ -31,16 +31,3 @@ public:
     CNode* startNode = nullptr;
     CNode* endNode = nullptr;
 };
-
-
-// Maze Instance on top of the D
-class Maze
-{
-public:
-    void DrawMap();
-    Maze();
-    Maze(std::string fpath);
-    CNode* currentNode;
-    CMaze Map;
-    bool hasWon();
-};
